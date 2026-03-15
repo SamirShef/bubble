@@ -1,0 +1,5 @@
+OP(LDC)
+OP(LDG)
+OP(AddI)
+OP(AddF)
+OP(Print)
