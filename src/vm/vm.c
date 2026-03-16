@@ -4,7 +4,7 @@
 
 struct VM
 newVM() {
-    struct VM vm = { .ip = NULL  };
+    struct VM vm = { .ip = NULL, .globsCount = 0  };
     vm.stackTop = vm.stackBegin = vm.stack;
     vm.stackEnd = vm.stack + STACK_SIZE;
     return vm;
@@ -39,6 +39,13 @@ push(struct VM *vm, struct Value v) {
     *++vm->stackTop = v;
 }
 
+size_t
+emitGlob(struct VM *vm, struct Value v) {
+    assert(vm->globsCount < GLOBS_SIZE && "Globs table overflow!");
+    vm->globs[vm->globsCount] = v;
+    return vm->globsCount++;
+}
+
 void
 run(struct VM *vm) {
     // TODO: storing max ip into VM instead comparing
@@ -50,15 +57,15 @@ run(struct VM *vm) {
             case LDC: {
                 size_t index = getIndex(vm);
                 printf("ldc: %zu\n", index);
-                push(vm, /*chunk->constants[index]*/
-                /* TODO: crate this function:*/
-                     chunk->constants.pool[index]
-                );
+                push(vm, chunk->constants.pool[index]);
                 break;
             }
-            case LDG:
-                printf("ldg: %zu\n", getIndex(vm));
+            case LDG: {
+                size_t index = getIndex(vm);
+                printf("ldg: %zu\n", index);
+                push(vm, vm->globs[index]);
                 break;
+            }
             case AddI: {
                 printf("addi:\n");
                 struct Value b = pop(vm);

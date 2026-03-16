@@ -5,9 +5,11 @@
 #include "chunk.h"
 
 #define STACK_SIZE 128
+#define GLOBS_SIZE 128
 
 struct VM {
-    struct Value globs[128];
+    struct Value globs[GLOBS_SIZE];
+    size_t globsCount;
     struct Chunk chunks[128];
     enum OpCode *ip;
     struct Value stack[STACK_SIZE];
@@ -28,6 +30,9 @@ pop(struct VM *vm);
 
 void
 push(struct VM *vm, struct Value v);
+
+size_t
+emitGlob(struct VM *vm, struct Value v);
 
 void
 run(struct VM *vm);
