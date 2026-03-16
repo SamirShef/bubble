@@ -16,4 +16,8 @@ struct Value {
     } data;
 };
 
+#define cmpVals(v1, v2) (v1.type == v2.type     && \
+                         v1.data.i == v2.data.i && \
+                         v1.data.r == v2.data.r)
+
 #endif

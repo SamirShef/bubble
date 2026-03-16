@@ -50,10 +50,10 @@ run(struct VM *vm) {
             case LDC: {
                 size_t index = getIndex(vm);
                 printf("ldc: %zu\n", index);
-                push(vm, chunk->constants[index]
-                /* TODO: crate this function:
-                     getOrCreateConst(chunk, index)
-                */);
+                push(vm, /*chunk->constants[index]*/
+                /* TODO: crate this function:*/
+                     chunk->constants.pool[index]
+                );
                 break;
             }
             case LDG:
